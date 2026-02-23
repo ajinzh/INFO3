@@ -1,0 +1,36 @@
+DEFAULT REL
+SECTION .data
+    ergebnis dq 0, 0
+    komplex_a dq 1, 2
+    komplex_b dq 3, 4
+    msg db "The result is: %d", 10, "and %d", 10, 13, 0
+SECTION .text
+    global main
+    extern printf
+ALIGN 8
+main:
+    push rbx
+
+    mov rax, qword [komplex_a]
+    imul rax, qword [komplex_b+8]
+    mov rbx, qword [komplex_b]
+    imul rbx, qword [komplex_a+8]
+    add rax, rbx
+    mov qword [ergebnis+8], rax
+
+    mov r8, qword [komplex_a]
+    imul r8, qword [komplex_b]
+    mov r9, qword [komplex_a+8]
+    imul r9, qword [komplex_b+8]
+    sub r8, r9
+    mov qword [ergebnis], r8
+
+    mov rdi, msg
+    mov rsi, qword [ergebnis]
+    mov rdx, qword [ergebnis+8]
+    call printf
+
+    pop rbx
+    mov rax, 0
+    ret
+  
