@@ -1,0 +1,37 @@
+DEFAULT REL
+SECTION .data
+    ergebnis dq 0
+    x dq 10
+    msg db "The result is: %lld", 10, 13, 0
+SECTION .text
+    global main
+    extern printf
+ALIGN 16
+main:
+    push rbp
+    mov rbp, rsp
+
+    mov rax, qword [x]
+    mov rbx, rax
+
+ loop_start:
+    cmp rbx, 1
+    jle loop_end
+
+    dec rbx
+    imul rax, rbx
+
+    jmp loop_start
+
+loop_end:
+    mov qword [ergebnis], rax
+
+    mov rdi, msg
+    mov rsi, qword [ergebnis]
+    call printf
+
+    mov rsp, rbp
+
+    pop rbp
+    mov rax, 0
+    ret
