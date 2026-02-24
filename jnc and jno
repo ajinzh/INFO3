@@ -1,0 +1,25 @@
+DEFAULT REL
+SECTION .data
+    var1 dq 5
+    var2 dq 10
+    ergebnis dq 0, 0
+SECTION .text
+    global main
+    extern printf
+ALIGN 8
+main:
+    push rbp
+    mov rbp, rsp
+    mov rbx, qword [var1]
+    mov rax, qword [var2]
+    imul rbx
+
+    jnc end
+    jno end
+    mov qword [ergebnis+8], rdx
+end:
+    mov qword [ergebnis], rax
+    pop rbp
+    mov rax, 0
+    ret
+    
