@@ -1,0 +1,27 @@
+void mutex_init(mutex_t* mutex)
+{
+/* muss zu Beginn auf 1 gesetzt werden (unlocked) */
+*mutex = 1;
+}
+/* Die Lock-Operation */
+void mutex_lock(mutex_t* mutex)
+{
+/* tmp ist Tauschvariable fuer swap() */
+int tmp = 0;
+/*
+* Mutex in tmp laden und gleichzeitig mit 0
+* sperren. Falls Mutex von anderem Prozess
+* gesperrt ist--> weiter probieren!
+*/
+do {
+tmp = swap(mutex, tmp);
+} while (tmp == 0);
+}
+/* Die Unlock-Operation */
+void mutex_unlock(mutex_t* mutex)
+{
+/* tmp ist Tauschvariable */
+int tmp = 1;
+/* Mutex freigeben */
+swap(mutex, tmp);
+}
